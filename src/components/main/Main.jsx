@@ -7,7 +7,7 @@ const Main = () => {
   const token = localStorage.getItem("token")
   const [role, setRole] = useState("")
   useEffect(() => {
-    axios.get("http://localhost:3006/api/getRole", { headers: { Authorization: `Bearer ${token}` } })
+    axios.get("https://i-ash-server.vercel.app/api/getRole", { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
         setRole(res.data.role)
       })

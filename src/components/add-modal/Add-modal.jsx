@@ -22,8 +22,8 @@ const AddModal = ({ onClose, product, onUpdate }) => {
 
      const addOrUpdateData = (data) => {
           const request = product
-               ? axios.put(`http://localhost:3006/api/update/${product._id}`, data)
-               : axios.post("http://localhost:3006/api/add", data);
+               ? axios.put(`https://i-ash-server.vercel.app/api/update/${product._id}`, data)
+               : axios.post("https://i-ash-server.vercel.app/api/add", data);
 
           request.then(response => {
                onClose(); // Close the modal after success

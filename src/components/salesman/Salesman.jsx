@@ -60,7 +60,7 @@ const Salesman = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3006/api/getall')
+      .get('https://i-ash-server.vercel.app/api/getall')
       .then((response) => {
         setProducts(response.data);
       })

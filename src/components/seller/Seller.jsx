@@ -22,7 +22,7 @@ const Seller = () => {
      });
 
      useEffect(() => {
-          axios.get("http://localhost:3006/api/getall")
+          axios.get("https://i-ash-server.vercel.app/api/getall")
                .then(response => {
                     setItems(response.data);
                     console.log("Данные успешно получены");
@@ -37,7 +37,7 @@ const Seller = () => {
      );
 
      const updateItemQuantityOnServer = (id, newQuantity) => {
-          axios.put(`http://localhost:3006/api/update/${id}`, { soni: newQuantity })
+          axios.put(`https://i-ash-server.vercel.app/api/update/${id}`, { soni: newQuantity })
                .then(response => {
                     console.log("Количество успешно обновлено", response.data);
                })
@@ -90,7 +90,7 @@ const Seller = () => {
                     saleDate: new Date().toISOString(),
                };
 
-               axios.post("http://localhost:3006/api/sell", soldItem)
+               axios.post("https://i-ash-server.vercel.app/api/sell", soldItem)
                     .then(response => {
                          console.log("Проданный товар успешно сохранен в базе данных", response.data);
                          notyf.success("Продукт успешно проданно")

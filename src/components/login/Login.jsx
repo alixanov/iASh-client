@@ -16,7 +16,7 @@ const Login = () => {
                password
           }
           axios
-               .post("http://localhost:3006/api/login", data)
+               .post("https://i-ash-server.vercel.app/api/login", data)
                .then((res) => {
                     localStorage.setItem("token", res.data.token);
                     window.location.reload();

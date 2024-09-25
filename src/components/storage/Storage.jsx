@@ -9,7 +9,7 @@ const Storage = () => {
     const itemsPerPage = 6;
 
     useEffect(() => {
-        axios.get("http://localhost:3006/api/sold-items")
+        axios.get("https://i-ash-server.vercel.app/api/sold-items")
             .then(response => {
                 setSoldItems(response.data);
                 const profit = response.data.reduce((sum, item) => {

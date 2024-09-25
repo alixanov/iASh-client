@@ -17,7 +17,7 @@ const CustomTableWithNavbar = () => {
 
      useEffect(() => {
           setIsLoading(true); // Устанавливаем состояние загрузки
-          axios.get("http://localhost:3006/api/getall")
+          axios.get("https://i-ash-server.vercel.app/api/getall")
                .then(response => {
                     setItems(response.data); // Сохраняем полученные данные в состоянии
                     setIsLoading(false); // Сбрасываем состояние загрузки
@@ -30,7 +30,7 @@ const CustomTableWithNavbar = () => {
 
      const handleDelete = (id) => {
           setIsLoading(true); // Устанавливаем состояние загрузки
-          axios.delete(`http://localhost:3006/api/delete/${id}`)
+          axios.delete(`https://i-ash-server.vercel.app/api/delete/${id}`)
                .then(res => {
                     setIsLoading(false); // Сбрасываем состояние загрузки
                     setDeleteState(prev => !prev); // Обновляем состояние, чтобы перезагрузить данные
