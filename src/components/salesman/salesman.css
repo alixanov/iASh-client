@@ -1,0 +1,104 @@
+.salesman__container {
+     width: 100%;
+     display: flex;
+     align-items: start;
+     justify-content: center;
+     flex-direction: column;
+}
+.salesman__navbar {
+     width: 100%;
+     height: 71px;
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     padding: 1%;
+     background-color: #2c3e50;
+     color: white;
+     font-size: 22px;
+}
+.salesman__profile {
+     display: flex;
+     align-items: center;
+     gap: 11px;
+}
+.salesman__card {
+     width: 100%;
+     display: flex;
+     align-items: center;
+}
+.salesman__table {
+     width: 70%;
+          height: 82vh;
+     background-color: #aacdf0;
+}
+.salesman__calculate {
+     width: 30%;
+     display: flex;
+     align-items: center;
+     flex-direction: column;
+     background-color: #18dc9e;
+     height: 82vh;
+     padding: 1%;
+}
+/* .salesmon__filter-input {
+     width: 200px;
+     height: 45px;
+     background-color: #2c3e50;
+     border-radius:8px;
+} */
+.salesmon__filter-input> input {
+     width: 330px;
+          height: 45px;
+          background-color: #2c3e50;
+          border-radius: 8px;
+          color: white;
+          font-size: 19px;
+          text-indent: 8px;
+          border: none;
+          outline: none;
+}
+.salesmon__filter-input>input::placeholder {
+     color: white;
+}
+.salesman__calculate-number {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 11px;
+}
+.salesman__calculate-number-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-direction: column;
+          gap: 11px;
+}
+.salesman__calculate-number-btn > button {
+     width: 50px;
+     height: 50px;
+     background-color: #2c3e50;
+     color: white;
+     border: none;
+     cursor: pointer;
+     border-radius: 50%;
+}
+.salesman__calculations-check {
+     width: 70%;
+     height: 10vh;
+     background-color: rgb(49, 39, 72);
+}
+.salesman__calculate-operation {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-direction: column;
+}
+.salesman__calculate-operation-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+}
+.salesman__calculate-operation-btn>button {
+     width: 140px;
+     display: flex;
+}

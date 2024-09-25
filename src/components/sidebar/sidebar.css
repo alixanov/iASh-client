@@ -1,0 +1,52 @@
+.sidebar.open {
+     width: 240px;
+     /* Длина сайдбара */
+}
+
+.sidebar.closed {
+     width: 0;
+}
+
+.admin__content {
+     transition: margin-left 0.3s ease, width 0.3s ease;
+     overflow: auto;
+}
+
+.content__box {
+     padding: 16px;
+}
+
+.toggle-sidebar-button {
+     position: fixed;
+     top: 16px;
+     left: 16px;
+     z-index: 1000;
+     background-color: #3498db;
+     color: white;
+     border: none;
+     padding: 10px;
+     cursor: pointer;
+     border-radius: 5px;
+}
+
+.fade-enter {
+     opacity: 0;
+     transform: scale(0.9);
+}
+
+.fade-enter-active {
+     opacity: 1;
+     transform: scale(1);
+     transition: opacity 300ms, transform 300ms;
+}
+
+.fade-exit {
+     opacity: 1;
+}
+
+.fade-exit-active {
+     opacity: 0;
+     transition: opacity 300ms;
+}
+
+/* uzgartirildi */
