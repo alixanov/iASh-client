@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Pagination } from '@mui/material';
+import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Pagination, useMediaQuery, useTheme } from '@mui/material';
 
 const Storage = () => {
     const [soldItems, setSoldItems] = useState([]);
     const [totalProfit, setTotalProfit] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Определяем мобильное устройство
 
     useEffect(() => {
         axios.get("https://i-ash-server.vercel.app/api/sold-items")
@@ -32,24 +34,33 @@ const Storage = () => {
     };
 
     return (
-        <Container maxWidth="lg">
+
+            
+
+        <Container maxWidth="lg"
+        
+        >
             <Box sx={{ marginTop: -1 }}>
-                <Typography variant="h4" component="h1" gutterBottom>
+                <Typography variant={isMobile ? "h5" : "h4"} component="h1" gutterBottom>
                     Сотилган махсулотлар
                 </Typography>
                 <Box sx={{ marginBottom: 2, padding: 2, backgroundColor: '#e0f7fa', borderRadius: '11px' }}>
-                    <Typography variant="h5">
+                    <Typography variant={isMobile ? "h6" : "h5"}>
                         Умумий соф фойда: <strong>+{Math.abs(totalProfit).toLocaleString('uz-UZ')} сум</strong>
                     </Typography>
                 </Box>
                 <TableContainer component={Paper} sx={{ borderRadius: '11px' }}>
                     <Table>
                         <TableHead>
-                            <TableRow sx={{ backgroundColor: '#324A5E', }}>
+                            <TableRow sx={{ backgroundColor: '#324A5E' }}>
                                 <TableCell sx={{ color: '#FFFFFF' }}>#</TableCell>
                                 <TableCell sx={{ color: '#FFFFFF' }}>Махсулот номи</TableCell>
-                                <TableCell sx={{ color: '#FFFFFF' }}>Келиш нархи</TableCell>
-                                <TableCell sx={{ color: '#FFFFFF' }}>Сотиш нархи</TableCell>
+                                {!isMobile && (
+                                    <>
+                                        <TableCell sx={{ color: '#FFFFFF' }}>Келиш нархи</TableCell>
+                                        <TableCell sx={{ color: '#FFFFFF' }}>Сотиш нархи</TableCell>
+                                    </>
+                                )}
                                 <TableCell sx={{ color: '#FFFFFF' }}>Микдори</TableCell>
                                 <TableCell sx={{ color: '#FFFFFF' }}>Сотув санаси</TableCell>
                             </TableRow>
@@ -70,8 +81,12 @@ const Storage = () => {
                                 >
                                     <TableCell sx={{ color: '#FFFFFF' }}>{indexOfFirstItem + index + 1}</TableCell>
                                     <TableCell sx={{ color: '#FFFFFF' }}>{item.nomi}</TableCell>
-                                    <TableCell sx={{ color: '#FFFFFF' }}>{item.kelgannarxi} сум</TableCell>
-                                    <TableCell sx={{ color: '#FFFFFF' }}>{item.sotishnarxi} сум</TableCell>
+                                    {!isMobile && (
+                                        <>
+                                            <TableCell sx={{ color: '#FFFFFF' }}>{item.kelgannarxi} сум</TableCell>
+                                            <TableCell sx={{ color: '#FFFFFF' }}>{item.sotishnarxi} сум</TableCell>
+                                        </>
+                                    )}
                                     <TableCell sx={{ color: '#FFFFFF' }}>
                                         {item.soni} {item.unit === 'kg' ? 'кг' : 'шт'}
                                     </TableCell>
@@ -89,6 +104,7 @@ const Storage = () => {
                         page={currentPage}
                         onChange={handlePageChange}
                         color="primary"
+                        size={isMobile ? "small" : "medium"} // Уменьшаем размер пагинации на мобильных устройствах
                         sx={{
                             '& .MuiPaginationItem-root': {
                                 '&:hover': {

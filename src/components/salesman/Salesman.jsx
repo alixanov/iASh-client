@@ -21,7 +21,8 @@ import {
   Divider,
   Snackbar,
   Alert,
-  Pagination
+  Pagination,
+  Hidden, // Импортируем Hidden для адаптации
 } from '@mui/material';
 import {
   AccountCircle,
@@ -30,7 +31,6 @@ import {
   Search,
   Receipt,
   Backspace,
-  // Payment,
   MonetizationOn,
 } from '@mui/icons-material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -38,9 +38,8 @@ import axios from 'axios';
 import LocalMallIcon from '@mui/icons-material/LocalMall';
 import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
 import { useReactToPrint } from 'react-to-print';
-
-
-
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { useNavigate } from 'react-router-dom';
 
 const Salesman = () => {
   const componentRef = useRef();
@@ -55,8 +54,8 @@ const Salesman = () => {
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const [page, setPage] = useState(1);
   const [itemsPerPage] = useState(1);
-  const [paymentMethod, setPaymentMethod] = useState(null); // Добавляем состояние для выбора метода оплаты
-
+  const [paymentMethod, setPaymentMethod] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -110,11 +109,11 @@ const Salesman = () => {
         soni: item.quantity,
         barcode: item.barcode,
         saleDate: new Date().toISOString(),
-        paymentMethod, // Добавляем метод оплаты к каждому проданному товару,
-        unit: item.unit // Добавляем единицу измерения (килограммы или штуки)
+        paymentMethod,
+        unit: item.unit
       };
 
-      axios.post("http://localhost:3006/api/sell", soldItem)
+      axios.post("https://i-ash-server.vercel.app/api/sell", soldItem)
         .then(response => {
           console.log("Проданный товар успешно сохранен в базе данных", response.data);
           setSnackbar({ open: true, message: 'Продукт успешно продан', severity: 'success' });
@@ -125,10 +124,9 @@ const Salesman = () => {
         });
     });
 
-    setTransaction([]); // Очистка чека после завершения продажи
-    setPaymentMethod(null); // Сброс метода оплаты после завершения продажи
-
-    handlePrint()
+    setTransaction([]);
+    setPaymentMethod(null);
+    handlePrint();
   };
 
   const handleRemoveItem = (id) => {
@@ -155,14 +153,16 @@ const Salesman = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setTime(new Date().toLocaleTimeString());
-    }, 1000); // Обновляем каждую секунду
-
-    // Чистим интервал при размонтировании компонента
+    }, 1000);
     return () => clearInterval(intervalId);
   }, []);
 
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/');
+  };
+
   return (
-    
     <Box sx={{ padding: '12px', backgroundColor: '#2C3E50', minHeight: '100vh' }}>
       <AppBar
         position="static"
@@ -173,27 +173,14 @@ const Salesman = () => {
         }}
       >
         <Toolbar>
-          {/* Логотип кассового аппарата */}
           <LocalMallIcon sx={{ marginRight: '12px', color: '#ECF0F1' }} />
-
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            ASh 
+            ASh
           </Typography>
-
-          {/* Часы реального времени */}
           <Typography variant="body1" sx={{ marginRight: '24px' }}>
             {time}
           </Typography>
-
-          {/* Иконка пользователя с выпадающим меню */}
-          {/* <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography variant="body1" sx={{ marginRight: '6px' }}>
-              Xxxxx Xxxxxxxxx
-            </Typography>
-            <IconButton>
-              <AccountCircle sx={{ color: '#ECF0F1' }} />
-            </IconButton>
-          </Box> */}
+          <ExitToAppIcon sx={styles.exitButton} onClick={handleLogout} />
         </Toolbar>
       </AppBar>
 
@@ -207,7 +194,6 @@ const Salesman = () => {
               value={barcode}
               onChange={(e) => {
                 const input = e.target.value;
-                // Проверяем ввод только цифр и символа '*'
                 if (/^[\d*]*$/.test(input)) {
                   setBarcode(input);
                 } else {
@@ -236,31 +222,7 @@ const Salesman = () => {
             <Grid container spacing={0.5} sx={{ marginBottom: '12px' }}>
               <Grid item xs={12}>
                 <Grid container spacing={0.5}>
-                  {['7', '8', '9'].map((label) => (
-                    <Grid item xs={4} key={label}>
-                      <Button
-                        variant="outlined"
-                        fullWidth
-                        onClick={() => setBarcode(barcode + label)}
-                        sx={{ minHeight: '36px', fontSize: '14px', color: '#ECF0F1', borderColor: '#ECF0F1' }}
-                      >
-                        {label}
-                      </Button>
-                    </Grid>
-                  ))}
-                  {['4', '5', '6'].map((label) => (
-                    <Grid item xs={4} key={label}>
-                      <Button
-                        variant="outlined"
-                        fullWidth
-                        onClick={() => setBarcode(barcode + label)}
-                        sx={{ minHeight: '36px', fontSize: '14px', color: '#ECF0F1', borderColor: '#ECF0F1' }}
-                      >
-                        {label}
-                      </Button>
-                    </Grid>
-                  ))}
-                  {['1', '2', '3'].map((label) => (
+                  {['7', '8', '9', '4', '5', '6', '1', '2', '3'].map((label) => (
                     <Grid item xs={4} key={label}>
                       <Button
                         variant="outlined"
@@ -294,7 +256,9 @@ const Salesman = () => {
                         }}
                         sx={{ minHeight: '36px', fontSize: '14px', color: '#ECF0F1', borderColor: '#ECF0F1' }}
                       >
-                        {label === 'Backspace' ? 'Учириш' : label === 'Enter' ? 'қидириш' : label}
+                        <Hidden smDown>
+                          {label === 'Backspace' ? 'Учириш' : label === 'Enter' ? 'Қидириш' : label}
+                        </Hidden>
                       </Button>
                     </Grid>
                   ))}
@@ -329,15 +293,12 @@ const Salesman = () => {
         </Grid>
 
         <Grid item xs={12} md={4}>
-          <Paper
-            sx={{ padding: '12px', backgroundColor: '#2c3e50', color: '#ECF0F1', border: "solid 1px white" }}>
+          <Paper sx={{ padding: '12px', backgroundColor: '#2c3e50', color: '#ECF0F1', border: "solid 1px white" }}>
             <Typography variant="h6" sx={{ marginBottom: '12px' }}>
               Чек
             </Typography>
-            <TableContainer component={Paper}
-              ref={componentRef} 
-            >
-              <Table sx={{ minWidth: 150, backgroundColor: '#2c3e50',border:'solid 1px white' }} aria-label="cheque table">
+            <TableContainer component={Paper} ref={componentRef}>
+              <Table sx={{ minWidth: 150, backgroundColor: '#2c3e50', border: 'solid 1px white' }} aria-label="cheque table">
                 <TableHead>
                   <TableRow>
                     <TableCell sx={{ color: '#ECF0F1' }}>Номи</TableCell>
@@ -373,42 +334,26 @@ const Salesman = () => {
                 startIcon={<CreditCard />}
                 sx={{ marginRight: '6px', backgroundColor: '#2980B9', color: '#ECF0F1' }}
               >
-             Картадан тулаш
+                Картадан тулаш
               </Button>
               <Button
                 variant="contained"
                 onClick={() => setPaymentMethod('Нақд')}
                 startIcon={<MonetizationOn />}
-                sx={{
-                  backgroundColor: '#27AE60',
-                  color: '#ECF0F1',
-                  '&:hover': {
-                    backgroundColor: '#057835', // более грубый зеленый цвет
-                  },
-                }}
+                sx={{ backgroundColor: '#27AE60', color: '#ECF0F1' }}
               >
-               Нақд пулда тулаш
+                Нақд пулда тулаш
               </Button>
-
             </Box>
-        
-
-
-         
-               
-                  <Button
-                    variant="contained"
-                    onClick={handleFinalizeSale}
+            <Button
+              variant="contained"
+              onClick={handleFinalizeSale}
               startIcon={<LocalGroceryStoreIcon />}
-                    sx={{ marginTop: '12px', backgroundColor: '#E74C3C', color: '#ECF0F1' }}
-                    disabled={!paymentMethod} // Кнопка отключена, если метод оплаты не выбран
-                  >
-                    Сотувни якунлаш
-                  </Button>
-              
-           
-
-
+              sx={{ marginTop: '12px', backgroundColor: '#E74C3C', color: '#ECF0F1' }}
+              disabled={!paymentMethod}
+            >
+              Сотувни якунлаш
+            </Button>
           </Paper>
         </Grid>
       </Grid>
@@ -427,7 +372,21 @@ const Salesman = () => {
   );
 };
 
+const styles = {
+  exitButton: {
+    color: '#e84e3c',
+    borderRadius: '10px',
+    border: 'none',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: '20px',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s ease',
+    '&:hover': {
+      color: '#97362c',
+    },
+  },
+};
 
 export default Salesman;
-
-

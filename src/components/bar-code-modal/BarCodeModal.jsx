@@ -17,7 +17,6 @@ const BarcodeModal = ({ onClose, product }) => {
                     <h2>Штрих-код продукта</h2>
                     <div className="barcode-container">
                          <Barcode value={product.barcode} /> {/* Отображение штрих-кода */}
-                         {/* <p>{product.barcode}</p> */}
                     </div>
                </div>
           </div>
@@ -25,4 +24,3 @@ const BarcodeModal = ({ onClose, product }) => {
 }
 
 export default BarcodeModal;
-     
